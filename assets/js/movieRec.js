@@ -1,6 +1,19 @@
 const apiKey = '30c8fccff0mshc16db0f46b38b94p10afdejsne26d80c5c3a8'; // Replace with your actual API key
 const apiUrl = 'https://imdb-top-100-movies.p.rapidapi.com/';
-
+var storedHistory = JSON.parse(localStorage.getItem('storedHistory') )|| []
+var recentSearches = document.querySelector(".searchHistory")
+for (let i = 0; i < storedHistory.length; i++) {
+  var li = document.createElement('li')
+  var br = document.createElement('br')
+  var p = document.createElement('p')
+  li.textContent = storedHistory[i].title 
+  p.textContent = storedHistory[i].location
+  
+  recentSearches.appendChild(li);
+  recentSearches.appendChild(p);
+  recentSearches.appendChild(br);
+  
+}
 // Set up the headers with the API key
 const headers = new Headers({
     'X-RapidAPI-Key': '30c8fccff0mshc16db0f46b38b94p10afdejsne26d80c5c3a8',
@@ -59,6 +72,25 @@ async function displayMovie(movie){
   var genre = document.getElementById('genre');
   var streaming = document.getElementById('streaming');
   var streamingText = await whereToWatch(movie.title)
+console.log(movie.title)
+
+
+
+storedHistory.push({title: movie.title, location: streamingText})
+localStorage.setItem('storedHistory',JSON.stringify(storedHistory))
+recentSearches.innerHTML=""
+for (let i = 0; i < storedHistory.length; i++) {
+  var li = document.createElement('li')
+  var br = document.createElement('br')
+  var p = document.createElement('p')
+  li.textContent = storedHistory[i].title 
+  p.textContent = storedHistory[i].location
+  
+  recentSearches.appendChild(li);
+  recentSearches.appendChild(p);
+  recentSearches.appendChild(br);
+  
+}
 
   title.innerText = movie.title;
   year.innerText = movie.year;
